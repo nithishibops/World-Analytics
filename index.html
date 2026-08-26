@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#04131e">
+<meta name="description" content="Global Outlook 2027 — six-page interactive population, economy, development, markets and country analytics dashboard.">
+<title>Global Outlook 2027 | Ananthavix Solutions</title>
+<link rel="stylesheet" href="style.css?v=20260826-world-elements">
+<script src="vendor/plotly.min.js?v=20260826-world-elements"></script>
+</head>
+<body>
+<div class="mobile-head">
+  <button id="mobileMenu" aria-label="Open navigation">☰</button>
+  <strong>Global Outlook 2027</strong>
+</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="assets/branding/ananthavix-logo.png" alt="Ananthavix Solutions">
+    <div><strong>ANANTHAVIX</strong><span>DATA • INSIGHT • SOLUTIONS • GROWTH</span></div>
+  </div>
+  <div class="product-label">GLOBAL OUTLOOK 2027</div>
+  <nav>
+    <button class="nav active" data-page="overview"><span>🌍</span><b>Global Overview</b><small>World at a glance</small></button>
+    <button class="nav" data-page="population"><span>👥</span><b>Population & Demographics</b><small>People and change</small></button>
+    <button class="nav" data-page="economy"><span>💰</span><b>Economy & Employment</b><small>Growth, jobs and trade</small></button>
+    <button class="nav" data-page="development"><span>❤️</span><b>Human Development</b><small>Quality of life</small></button>
+    <button class="nav" data-page="markets"><span>📈</span><b>Markets, Companies & Sports</b><small>Beyond macroeconomics</small></button>
+    <button class="nav" data-page="deepdive"><span>🔎</span><b>Country Deep Dive</b><small>2015–2027 outlook</small></button>
+  </nav>
+  <div class="side-note">
+    <b>MODELLED PORTFOLIO DATA</b>
+    <p>Built from the supplied 40-country workbook structure. 2026–2027 are illustrative estimates/projections, not official forecasts.</p>
+  </div>
+</aside>
+
+<main>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">GLOBAL DATA • 40 COUNTRIES • 2015–2027</p>
+      <h1 id="pageTitle">Global Overview</h1>
+      <p id="pageSub">A simple view of population, economic size, income and human development across the world.</p>
+    </div>
+    <div class="top-actions">
+      <a href="assets/data/global-dashboard-source-template.xlsx" download class="small-btn">⇩ Source Template</a>
+      <button id="fullBtn" class="small-btn">⛶ Fullscreen</button>
+    </div>
+  </header>
+
+  <section class="data-note">
+    <b>How to read this dashboard:</b> values are illustrative/modelled for portfolio demonstration. Use the source template to replace them with verified data before formal publication.
+  </section>
+
+  <section class="filters">
+    <label><span>YEAR</span><select id="yearFilter"></select></label>
+    <label><span>REGION</span><select id="regionFilter"><option value="ALL">All Regions</option></select></label>
+    <label><span>COUNTRY</span><select id="countryFilter"><option value="ALL">All Countries</option></select></label>
+    <button id="resetBtn">Reset filters</button>
+    <div class="scope"><small>CURRENT VIEW</small><b id="scopeText">2027 • All Regions</b></div>
+  </section>
+
+  <!-- PAGE 1 -->
+  <section class="page active" id="page-overview" data-title="Global Overview" data-sub="A simple view of population, economic size, income and human development across the world." data-accent="sky">
+    <div class="kpis">
+      <article><span>Population</span><strong id="ovPop">—</strong><small>People in selected scope</small></article>
+      <article><span>GDP</span><strong id="ovGDP">—</strong><small>Combined economic output</small></article>
+      <article><span>GDP per person</span><strong id="ovGDPpc">—</strong><small>Population-weighted average</small></article>
+      <article><span>HDI</span><strong id="ovHDI">—</strong><small>Population-weighted development index</small></article>
+      <article><span>Internet use</span><strong id="ovInternet">—</strong><small>Population-weighted adoption</small></article>
+      <article><span>Urban share</span><strong id="ovUrban">—</strong><small>Population-weighted urbanization</small></article>
+    </div>
+
+    <div class="grid overview-grid">
+      <article class="panel map-panel">
+        <div class="panel-head">
+          <div><span>WORLD MAP</span><h3>Where are people and economies concentrated?</h3></div>
+          <select id="mapMetric"><option value="populationM">Population</option><option value="gdpT">GDP</option><option value="gdpPerCapita">GDP per capita</option><option value="hdi">HDI</option></select>
+        </div>
+        <div id="worldMap" class="plot map"></div>
+        <p class="explain">Darker countries have higher values for the selected map measure. Hover over a country for details.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><span>TOP COUNTRIES</span><h3>Largest economies</h3></div></div>
+        <div id="topGDP" class="plot"></div>
+        <p class="explain">Longer bars mean a larger modelled GDP in the selected year.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><span>2015–2027</span><h3>How are population and GDP changing?</h3></div></div>
+        <div id="globalTrend" class="plot"></div>
+        <p class="explain">The lines show how the selected scope changes over time. 2026–2027 are projections.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><span>REGIONS</span><h3>Where does global GDP come from?</h3></div></div>
+        <div id="regionGDP" class="plot"></div>
+        <p class="explain">This splits the selected year's GDP across regions.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><div><span>DEVELOPMENT</span><h3>Highest and lowest HDI</h3></div></div>
+        <div id="hdiRank" class="plot"></div>
+        <p class="explain">HDI combines health, education and living-standard dimensions into one index.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="page" id="page-population" data-title="Population & Demographics" data-sub="Population growth, age structure, fertility, migration and urbanization explained clearly." data-accent="green">
+    <div class="kpis">
+      <article><span>Population</span><strong id="pPop">—</strong><small>Selected scope</small></article>
+      <article><span>10-year growth</span><strong id="pGrowth">—</strong><small>Population change since 2017</small></article>
+      <article><span>Fertility</span><strong id="pFert">—</strong><small>Births per woman</small></article>
+      <article><span>Net migration</span><strong id="pMig">—</strong><small>Modelled annual net migration</small></article>
+      <article><span>Urban population</span><strong id="pUrban">—</strong><small>Share living in urban areas</small></article>
+      <article><span>Age 65+</span><strong id="pSenior">—</strong><small>Population share</small></article>
+    </div>
+    <div class="grid">
+      <article class="panel wide"><div class="panel-head"><div><span>POPULATION GROWTH</span><h3>Which countries are growing fastest?</h3></div></div><div id="popGrowthRank" class="plot"></div><p class="explain">Shows percentage population change from 2017 to the selected year.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>AGE STRUCTURE</span><h3>Young, working-age and senior population</h3></div></div><div id="ageStructure" class="plot"></div><p class="explain">A larger young share signals future workforce growth; a larger senior share signals ageing pressure.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>FERTILITY</span><h3>Where are birth rates highest?</h3></div></div><div id="fertilityRank" class="plot"></div><p class="explain">Replacement fertility is roughly 2.1 births per woman.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>MIGRATION</span><h3>Population growth vs migration</h3></div></div><div id="migrationScatter" class="plot"></div><p class="explain">Countries to the right receive more net migrants; higher dots have faster population growth.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>URBANIZATION</span><h3>How urban is each region?</h3></div></div><div id="urbanRegion" class="plot"></div><p class="explain">Shows the population-weighted share living in cities and urban areas.</p></article>
+      <article class="panel wide"><div class="panel-head"><div><span>POPULATION & INCOME</span><h3>Do larger populations have higher income per person?</h3></div></div><div id="popVsIncome" class="plot"></div><p class="explain">Each dot is a country. Size represents total GDP.</p></article>
+    </div>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="page" id="page-economy" data-title="Economy & Employment" data-sub="GDP, income, inflation, jobs, trade and economic sectors in one place." data-accent="violet">
+    <div class="kpis">
+      <article><span>GDP</span><strong id="eGDP">—</strong><small>Combined output</small></article>
+      <article><span>GDP per person</span><strong id="eGDPpc">—</strong><small>Weighted average</small></article>
+      <article><span>GDP growth</span><strong id="eGrowth">—</strong><small>Weighted annual rate</small></article>
+      <article><span>Inflation</span><strong id="eInflation">—</strong><small>Weighted annual rate</small></article>
+      <article><span>Unemployment</span><strong id="eUnemp">—</strong><small>Weighted labour-force rate</small></article>
+      <article><span>Trade / GDP</span><strong id="eTrade">—</strong><small>Trade intensity</small></article>
+    </div>
+    <div class="grid">
+      <article class="panel wide"><div class="panel-head"><div><span>ECONOMIC SCALE</span><h3>Largest economies in the selected view</h3></div></div><div id="economyGDP" class="plot"></div><p class="explain">GDP measures total economic output; it does not directly measure household wellbeing.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>INCOME</span><h3>Highest GDP per person</h3></div></div><div id="gdpPcRank" class="plot"></div><p class="explain">GDP per capita is GDP divided by population and is useful for broad income comparisons.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>PRICES & JOBS</span><h3>Inflation vs unemployment</h3></div></div><div id="inflationUnemployment" class="plot"></div><p class="explain">Each dot is a country. It compares price pressure with labour-market weakness.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>TRADE</span><h3>Most trade-intensive economies</h3></div></div><div id="tradeRank" class="plot"></div><p class="explain">Trade as a percentage of GDP is often higher in smaller, open economies.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>ECONOMIC MIX</span><h3>Agriculture, industry and services</h3></div></div><div id="sectorMix" class="plot"></div><p class="explain">Shows how economic activity is divided across major sectors.</p></article>
+      <article class="panel wide"><div class="panel-head"><div><span>GROWTH TREND</span><h3>2015–2027 GDP growth path</h3></div></div><div id="growthTrend" class="plot"></div><p class="explain">2026–2027 values are modelled outlook estimates.</p></article>
+    </div>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section class="page" id="page-development" data-title="Human Development & Quality of Life" data-sub="HDI, literacy, health, life expectancy and digital adoption — beyond GDP." data-accent="gold">
+    <div class="kpis">
+      <article><span>HDI</span><strong id="dHDI">—</strong><small>Weighted development index</small></article>
+      <article><span>Literacy</span><strong id="dLit">—</strong><small>Adult literacy</small></article>
+      <article><span>Life expectancy</span><strong id="dLife">—</strong><small>Average years</small></article>
+      <article><span>Health spending</span><strong id="dHealth">—</strong><small>Share of GDP</small></article>
+      <article><span>Internet use</span><strong id="dInternet">—</strong><small>Population share</small></article>
+      <article><span>Development gap</span><strong id="dGap">—</strong><small>Highest minus lowest HDI</small></article>
+    </div>
+    <div class="grid">
+      <article class="panel wide"><div class="panel-head"><div><span>HDI</span><h3>Which countries have the highest human development?</h3></div></div><div id="hdiTop" class="plot"></div><p class="explain">Higher HDI generally indicates stronger health, education and living standards.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>HEALTH</span><h3>Do countries that spend more on health live longer?</h3></div></div><div id="healthLife" class="plot"></div><p class="explain">The relationship is not automatic — efficiency and access also matter.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>LITERACY</span><h3>Literacy across regions</h3></div></div><div id="literacyRegion" class="plot"></div><p class="explain">Population-weighted literacy makes large countries count proportionally.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>DIGITAL ADOPTION</span><h3>Internet use by region</h3></div></div><div id="internetRegion" class="plot"></div><p class="explain">Higher internet adoption often improves access to information, services and digital commerce.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>WEALTH & WELLBEING</span><h3>Does higher income mean higher HDI?</h3></div></div><div id="incomeHDI" class="plot"></div><p class="explain">The curve usually flattens at high income levels, showing diminishing development gains from income alone.</p></article>
+      <article class="panel wide"><div class="panel-head"><div><span>DEVELOPMENT TREND</span><h3>2015–2027 HDI & life expectancy</h3></div></div><div id="developmentTrend" class="plot"></div><p class="explain">Shows the direction of development indicators over time for the current scope.</p></article>
+    </div>
+  </section>
+
+  <!-- PAGE 5 -->
+  <section class="page" id="page-markets" data-title="Markets, Companies & Sports" data-sub="Capital markets, leading companies and a lighter sports profile for global comparison." data-accent="orange">
+    <div class="kpis">
+      <article><span>Market capitalization</span><strong id="mCap">—</strong><small>Modelled listed-equity value</small></article>
+      <article><span>Market cap / GDP</span><strong id="mCapGDP">—</strong><small>Weighted market depth</small></article>
+      <article><span>Listed companies</span><strong id="mListed">—</strong><small>Modelled count</small></article>
+      <article><span>Top company</span><strong id="mCompany">—</strong><small id="mCompanySub">Largest modelled company</small></article>
+      <article><span>Sports medals</span><strong id="mMedals">—</strong><small>Portfolio reference count</small></article>
+      <article><span>Sports score</span><strong id="mSportScore">—</strong><small>Modelled comparison score</small></article>
+    </div>
+    <div class="grid">
+      <article class="panel wide"><div class="panel-head"><div><span>STOCK MARKETS</span><h3>Largest equity markets</h3></div></div><div id="marketCapRank" class="plot"></div><p class="explain">Market capitalization is the combined value of listed companies in the modelled dataset.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>MARKET DEPTH</span><h3>Market capitalization vs GDP</h3></div></div><div id="marketGDPScatter" class="plot"></div><p class="explain">Countries above 100% have listed-equity value larger than one year of GDP.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>LEADING COMPANIES</span><h3>Largest company examples</h3></div></div><div id="companyRank" class="plot"></div><p class="explain">Illustrative company values are included for portfolio storytelling, not investment decisions.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>SECTORS</span><h3>What sectors do leading companies represent?</h3></div></div><div id="companySector" class="plot"></div><p class="explain">Shows the sector mix of the country-level company examples.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>SPORTS</span><h3>Countries with the strongest sports profile</h3></div></div><div id="sportsRank" class="plot"></div><p class="explain">The portfolio sports score combines medal reference counts with a small population/development adjustment.</p></article>
+      <article class="panel wide"><div class="panel-head"><div><span>MARKETS & ECONOMY</span><h3>Market cap vs GDP</h3></div></div><div id="marketCapGDP" class="plot"></div><p class="explain">Each dot compares the size of the equity market with the size of the economy.</p></article>
+    </div>
+  </section>
+
+  <!-- PAGE 6 -->
+  <section class="page" id="page-deepdive" data-title="Country Deep Dive & 2027 Outlook" data-sub="Choose a country and see its long-term direction, regional position and 2027 outlook." data-accent="cyan">
+    <div class="deep-controls">
+      <label><span>SELECT A COUNTRY</span><select id="deepCountry"></select></label>
+      <div id="countryBadge" class="country-badge">India • South Asia</div>
+    </div>
+    <div class="kpis">
+      <article><span>2027 Population</span><strong id="xPop">—</strong><small id="xPopChange">—</small></article>
+      <article><span>2027 GDP</span><strong id="xGDP">—</strong><small id="xGDPCagr">—</small></article>
+      <article><span>GDP per person</span><strong id="xGDPpc">—</strong><small id="xGDPpcChange">—</small></article>
+      <article><span>HDI</span><strong id="xHDI">—</strong><small id="xHDIChange">—</small></article>
+      <article><span>Top company</span><strong id="xCompany">—</strong><small id="xCompanySector">—</small></article>
+      <article><span>Sports profile</span><strong id="xSports">—</strong><small id="xSportsSub">—</small></article>
+    </div>
+    <div class="grid">
+      <article class="panel wide"><div class="panel-head"><div><span>2015–2027</span><h3>Population, GDP per person & HDI trend</h3></div></div><div id="countryTrend" class="plot"></div><p class="explain">2026–2027 are modelled outlook values. Earlier years are also illustrative in this portfolio dataset.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>COMPARE</span><h3>Country vs region vs global</h3></div></div><div id="countryCompare" class="plot"></div><p class="explain">Values are indexed to the global average = 100 for easy comparison across different units.</p></article>
+      <article class="panel"><div class="panel-head"><div><span>2027 OUTLOOK</span><h3>Key direction indicators</h3></div></div><div id="outlookBars" class="plot"></div><p class="explain">Shows direction and scale of selected 2027 indicators.</p></article>
+      <article class="panel wide change-panel">
+        <div class="panel-head"><div><span>CHANGE ANALYSIS</span><h3>YoY, 5-year, 10-year & CAGR</h3></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Indicator</th><th>2027</th><th>YoY</th><th>5-Year Change</th><th>10-Year Change</th><th>2017–2027 CAGR</th></tr></thead><tbody id="changeTable"></tbody></table></div>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>Ananthavix Solutions</b> • Data. Insight. Solutions. Growth.</div>
+    <div>Portfolio model • 40-country structure from supplied workbook • 2015–2027</div>
+  </footer>
+</main>
+
+<div id="toast" class="toast"></div>
+<script src="data.js?v=20260820-2"></script>
+<script src="app.js?v=20260820-2"></script>
+</body>
+</html>
