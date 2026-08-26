@@ -1,9 +1,0 @@
-Global Outlook 2027 — Fixed build
-
-Fixes applied:
-1. Renamed the global helper `top` to `topN` everywhere.
-2. Wrapped app.js in an IIFE with strict mode so application variables cannot collide with browser globals.
-3. Added version query strings to app.js, data.js, style.css and Plotly to prevent stale browser caches.
-4. Added Vercel revalidation headers for app.js, data.js and style.css.
-5. Node syntax check passed.
-6. Headless runtime simulation passed and populated KPI values (example: 2027 scope population 6.18B, GDP $109.0T).
